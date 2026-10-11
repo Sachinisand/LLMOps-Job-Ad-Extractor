@@ -1,0 +1,25 @@
+# Runs on every push: unit tests, evaluation with quality gate, Docker build.
+# No LLM is needed here: the evaluation uses the rule-based baseline, so the
+# pipeline itself (parsing, scoring, gate) is tested on every change.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Unit tests
+        run: pytest -q
+      - name: Evaluation + quality gate (baseline)
+        run: python -m eval.evaluate --backend baseline
+      - name: Build Docker image
+        run: docker build -t jobad-extractor .
