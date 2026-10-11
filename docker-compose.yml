@@ -1,0 +1,23 @@
+# Runs the API together with a local LLM.
+#   docker compose up -d
+#   docker compose exec ollama ollama pull llama3.2:3b   (first time only)
+#   open http://localhost:8000/docs
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    volumes: ["ollama-models:/root/.ollama"]
+
+  api:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      LLM_BACKEND: ollama
+      LLM_MODEL: llama3.2:3b
+      OLLAMA_URL: http://ollama:11434
+      PROMPT_VERSION: v2
+    volumes: ["./data:/app/data"]     # keeps the monitoring database
+    depends_on: [ollama]
+
+volumes:
+  ollama-models:
