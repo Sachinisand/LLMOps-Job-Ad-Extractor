@@ -1,0 +1,49 @@
+# Manual workflow: installs Ollama on the GitHub runner, downloads an open model
+# and runs the full evaluation with the real LLM. Start it from the Actions tab
+# ("LLM evaluation" -> "Run workflow"). Results appear on the run page and as a
+# downloadable artifact. CPU only, so a 3B model takes roughly 20-40 minutes.
+name: LLM evaluation
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "Ollama model"
+        default: "llama3.2:3b"
+      prompt:
+        description: "Prompt version (v1, v2, ...)"
+        default: "v2"
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Install Ollama and pull the model
+        run: |
+          curl -fsSL https://ollama.com/install.sh | sh
+          (ollama serve > ollama.log 2>&1 &)
+          sleep 5
+          ollama pull "${{ inputs.model }}"
+      - name: Evaluate on the development set (30 ads)
+        run: python -m eval.evaluate --backend ollama --model "${{ inputs.model }}" --prompt "${{ inputs.prompt }}" --set main
+        continue-on-error: true
+      - name: Evaluate on the held-out set (12 unseen ads)
+        run: python -m eval.evaluate --backend ollama --model "${{ inputs.model }}" --prompt "${{ inputs.prompt }}" --set holdout
+        continue-on-error: true
+      - name: Baseline on the same sets, for comparison
+        run: |
+          python -m eval.evaluate --backend baseline --set main
+          python -m eval.evaluate --backend baseline --set holdout
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results-${{ inputs.model }}-${{ inputs.prompt }}
+          path: eval/results/
