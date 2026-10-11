@@ -101,6 +101,15 @@ def main(argv=None):
                  "| metric | value |", "|---|---|"]
         lines += [f"| {k} | {v} |" for k, v in metrics.items() if k != "field_accuracy_by_field"]
         lines += [f"| accuracy: {k} | {v:.0%} |" for k, v in metrics["field_accuracy_by_field"].items()]
+        # A few real model answers, so readers can see what the scores are based on.
+        texts = {a["id"]: a["text"] for a in ads}
+        for r in rows[:3]:
+            lines += ["", f"<details><summary>Example {r['id']}</summary>", "",
+                      "**Job ad**", "", "```text", texts[r["id"]].strip(), "```", "",
+                      "**Model answer**", "", "```json",
+                      json.dumps(r["prediction"], ensure_ascii=False, indent=2), "```", "",
+                      "**Correct label**", "", "```json",
+                      json.dumps(r["label"], ensure_ascii=False, indent=2), "```", "", "</details>"]
         with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
             f.write("\n".join(lines) + "\n\n")
 
