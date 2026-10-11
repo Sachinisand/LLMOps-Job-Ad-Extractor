@@ -58,7 +58,7 @@ Each run reports field accuracy (8 fields), skill precision/recall/F1, valid-JSO
 | LLM (Llama 3.2 3B, prompt v2) | development | 86.7 % | 0.89 | 100 % | 10.4 s |
 | LLM (Llama 3.2 3B, prompt v2) | **held-out** | **80.2 %** | 0.89 | 100 % | 10.5 s |
 
-LLM numbers are from the [LLM evaluation run](https://github.com/Sachinisand/LLMOps-Job-Ad-Extractor/actions/runs/38144055401) on a CPU-only GitHub runner. Both LLM runs pass the quality gate (valid JSON ≥ 95 %, field accuracy ≥ 75 %, skills F1 ≥ 0.70).
+LLM numbers are from the [LLM evaluation run](https://github.com/Sachinisand/LLMOps-Job-Ad-Extractor/actions/runs/38146811751) on a CPU-only GitHub runner. Both LLM runs pass the quality gate (valid JSON ≥ 95 %, field accuracy ≥ 75 %, skills F1 ≥ 0.70).
 
 Accuracy by field on the held-out set:
 
