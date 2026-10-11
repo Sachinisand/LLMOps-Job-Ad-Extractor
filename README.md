@@ -4,20 +4,19 @@
 
 The task: read a German or English job ad and return clean, structured data, the kind of data a job platform or recruiting team needs to filter thousands of ads.
 
-```text
-"Junior Data Analyst (m/w/d) – Standort: Hamburg … Power BI, SQL … Deutsch B2 … Hybrid … 46.000 – 52.000 €"
-```
-```json
-{"job_title": "Junior Data Analyst", "seniority": "junior", "skills": ["power bi", "sql"],
- "german_level": "B2", "english_required": true, "work_mode": "hybrid",
- "salary_min": 46000, "salary_max": 52000, "location": "Hamburg"}
-```
+<p align="center"><img src="docs/demo.svg" alt="Demo: a German and an English job ad are sent to the service; the model's JSON answer appears field by field, each field marked right or wrong against the hand-written label" width="100%"></p>
+
+*Real answers from Llama 3.2 3B on two held-out ads, copied from the [evaluation run](https://github.com/Sachinisand/LLMOps-Job-Ad-Extractor/actions/runs/38149592598) (the ~10 s wait is sped up). ✓/✗ compares each field with the hand-written label, mistakes included. Source data: [`docs/demo_example.json`](docs/demo_example.json).*
 
 It runs on a free, open-source model (Llama 3.2 via [Ollama](https://ollama.com)) on a normal laptop. No paid API key.
 
 ---
 
 ## The LLMOps cycle in this project
+
+<p align="center"><img src="docs/pipeline.svg" alt="Animated diagram: a job ad goes through the prompt, the LLM and schema validation to a JSON result; every request is logged to monitoring, and an offline evaluation decides which model and prompt may run" width="100%"></p>
+
+<details><summary>Same flow as a static diagram</summary>
 
 ```mermaid
 flowchart LR
@@ -32,6 +31,8 @@ flowchart LR
     I[Labelled job ads] --> J[Evaluation +<br/>quality gate]
     J -->|pass| K[Release: new prompt / model]
 ```
+
+</details>
 
 | Stage | What it means | Where in the code |
 |---|---|---|
@@ -58,7 +59,7 @@ Each run reports field accuracy (8 fields), skill precision/recall/F1, valid-JSO
 | LLM (Llama 3.2 3B, prompt v2) | development | 86.7 % | 0.89 | 100 % | 10.4 s |
 | LLM (Llama 3.2 3B, prompt v2) | **held-out** | **80.2 %** | 0.89 | 100 % | 10.5 s |
 
-LLM numbers are from the [LLM evaluation run](https://github.com/Sachinisand/LLMOps-Job-Ad-Extractor/actions/runs/38146811751) on a CPU-only GitHub runner. Both LLM runs pass the quality gate (valid JSON ≥ 95 %, field accuracy ≥ 75 %, skills F1 ≥ 0.70).
+LLM numbers are from the [LLM evaluation run](https://github.com/Sachinisand/LLMOps-Job-Ad-Extractor/actions/runs/38149592598) on a CPU-only GitHub runner; the run page also shows three example answers per set. Both LLM runs pass the quality gate (valid JSON ≥ 95 %, field accuracy ≥ 75 %, skills F1 ≥ 0.70).
 
 Accuracy by field on the held-out set:
 
@@ -77,7 +78,7 @@ Accuracy by field on the held-out set:
 
 - **The rules overfit.** They look best on the ads they were written for (92.5 %) but drop to 68.8 % on unseen wording; location falls to 0 %.
 - **The LLM generalises better.** It loses only 6.5 points between the two sets and beats the rules on the held-out set by 11 points, mainly on location, seniority and work mode.
-- **The LLM is weak on numbers.** Salary fields are its main error source (58 % on held-out). The prompt asks the model to turn monthly pay into yearly and to handle ranges and hourly pay, and a 3B model does that arithmetic unreliably. A next step would be to let the LLM copy the raw salary text and do the conversion in Python.
+- **The LLM is weak on numbers.** Salary fields are its main error source (58 % on held-out). The prompt asks the model to turn monthly pay into yearly and to handle ranges. A 3B model does that unreliably: for an ad with "Monatsgehalt: 4.200 €" it returned 4,200 as the yearly salary instead of 50,400 (example *holdout03* on the run page). A next step would be to let the LLM copy the raw salary text and do the conversion in Python.
 - **The cost is speed.** About 10 s per ad on CPU, against under 1 ms for the rules. Fine for a batch job, too slow for an interactive tool without a GPU or a smaller model.
 - **Practical choice:** combine both. Use the LLM for text fields and rules for salaries, and compare the hybrid with the same evaluation.
 
@@ -158,7 +159,8 @@ LLMOps-Job-Ad-Extractor/
 │   └── api.py           ← FastAPI service
 ├── prompts/             ← v1.md, v2.md (versioned prompts)
 ├── eval/                ← labelled ads, evaluate.py, results/
-├── scripts/             ← traffic simulation, monitoring report, test-set builders
+├── scripts/             ← traffic simulation, monitoring report, test-set builders, README visuals
+├── docs/                ← animated pipeline diagram, demo clip (+ the real model answer it shows)
 ├── tests/               ← 21 unit and API tests
 ├── outputs/             ← example monitoring report
 ├── config.yaml          ← model, prompt version, quality gate
