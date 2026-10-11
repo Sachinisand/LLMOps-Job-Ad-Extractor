@@ -1,7 +1,7 @@
 # Manual workflow: installs Ollama on the GitHub runner, downloads an open model
 # and runs the full evaluation with the real LLM. Start it from the Actions tab
 # ("LLM evaluation" -> "Run workflow"). Results appear on the run page and as a
-# downloadable artifact. CPU only, so a 3B model takes roughly 20-40 minutes.
+# downloadable artifact. CPU only: a 3B model takes about 10 minutes for both sets.
 name: LLM evaluation
 
 on:
@@ -45,5 +45,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: eval-results-${{ inputs.model }}-${{ inputs.prompt }}
+          name: eval-results-run${{ github.run_number }}-prompt-${{ inputs.prompt }}   # no ":" allowed in artifact names
           path: eval/results/
