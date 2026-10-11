@@ -1,0 +1,118 @@
+{
+  "source": "https://github.com/Sachinisand/LLMOps-Job-Ad-Extractor/actions/runs/38149592598",
+  "note": "Model answers copied from the step summary of LLM evaluation run #3 (held-out set). Latency per ad is not stored in the summary, so the clip shows the median (p50) of that run.",
+  "model": "llama3.2:3b",
+  "prompt": "v2",
+  "latency_p50_s": 9.8,
+  "show": [
+    "holdout01",
+    "holdout02"
+  ],
+  "examples": [
+    {
+      "example_id": "holdout01",
+      "text": "Wir suchen dich als Data Analyst (all genders) für unser Team in Essen!\nWas du mitbringst: Einstiegsposition – auch für Absolvent:innen. Microsoft Excel, MS SQL Server und Power-BI.\nDeutschkenntnisse auf C1-Niveau, Englisch reicht auf Basisniveau.\nBis zu 3 Tage Home-Office pro Woche. Jahresgehalt ab 45.000 Euro.",
+      "prediction": {
+        "job_title": "Data Analyst",
+        "seniority": "junior",
+        "skills": [
+          "excel",
+          "ms sql server",
+          "power bi"
+        ],
+        "german_level": "C1",
+        "english_required": false,
+        "work_mode": "unspecified",
+        "salary_min": 45000,
+        "salary_max": null,
+        "location": "Essen"
+      },
+      "label": {
+        "job_title": "Data Analyst",
+        "seniority": "junior",
+        "skills": [
+          "excel",
+          "power bi",
+          "sql"
+        ],
+        "german_level": "C1",
+        "english_required": true,
+        "work_mode": "hybrid",
+        "salary_min": 45000,
+        "salary_max": 45000,
+        "location": "Essen"
+      }
+    },
+    {
+      "example_id": "holdout02",
+      "text": "Lead Data Engineer @ Wavelength Media (Cologne)\nWe need someone to own our lakehouse: PySpark, Delta Lake on Databricks, Terraform, CI/CD with GitHub Actions.\nYou'll manage 4 engineers. Our working language is English – German skills are welcome but optional.\nWork from anywhere in Germany. Package: up to EUR 105,000.",
+      "prediction": {
+        "job_title": "Lead Data Engineer",
+        "seniority": "lead",
+        "skills": [
+          "databricks",
+          "github actions",
+          "spark",
+          "terraform"
+        ],
+        "german_level": "unspecified",
+        "english_required": true,
+        "work_mode": "unspecified",
+        "salary_min": 105000,
+        "salary_max": 105000,
+        "location": "Cologne"
+      },
+      "label": {
+        "job_title": "Lead Data Engineer",
+        "seniority": "lead",
+        "skills": [
+          "databricks",
+          "delta lake",
+          "github actions",
+          "spark",
+          "terraform"
+        ],
+        "german_level": "unspecified",
+        "english_required": true,
+        "work_mode": "remote",
+        "salary_min": null,
+        "salary_max": 105000,
+        "location": "Köln"
+      }
+    },
+    {
+      "example_id": "holdout03",
+      "text": "Datenanalyst:in Einkauf – Kühne & Partner Lebensmittel\nArbeitsort Osnabrück, Präsenzpflicht im Büro\nDu wertest Lieferantendaten aus (Excel, Power Query) und pflegst Kennzahlen im ERP-System SAP.\nMehrjährige Erfahrung im Einkaufscontrolling. Deutsch auf muttersprachlichem Niveau.\nMonatsgehalt: 4.200 € (12 Gehälter).",
+      "prediction": {
+        "job_title": "Datenanalyst:in",
+        "seniority": "mid",
+        "skills": [
+          "excel",
+          "power query",
+          "sap"
+        ],
+        "german_level": "native",
+        "english_required": false,
+        "work_mode": "onsite",
+        "salary_min": 4200,
+        "salary_max": null,
+        "location": "Osnabrück"
+      },
+      "label": {
+        "job_title": "Datenanalyst:in Einkauf",
+        "seniority": "mid",
+        "skills": [
+          "excel",
+          "power query",
+          "sap"
+        ],
+        "german_level": "native",
+        "english_required": null,
+        "work_mode": "onsite",
+        "salary_min": 50400,
+        "salary_max": 50400,
+        "location": "Osnabrück"
+      }
+    }
+  ]
+}
