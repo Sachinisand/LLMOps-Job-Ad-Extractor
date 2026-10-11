@@ -55,12 +55,33 @@ Each run reports field accuracy (8 fields), skill precision/recall/F1, valid-JSO
 |---|---|---:|---:|---:|---:|
 | Rule-based baseline (no LLM) | development | 92.5 % | 0.99 | 100 % | < 1 ms |
 | Rule-based baseline (no LLM) | **held-out** | **68.8 %** | 0.91 | 100 % | < 1 ms |
-| LLM (Llama 3.2 3B, prompt v2) | development | *run the LLM evaluation* | | | |
-| LLM (Llama 3.2 3B, prompt v2) | **held-out** | *run the LLM evaluation* | | | |
+| LLM (Llama 3.2 3B, prompt v2) | development | 86.7 % | 0.89 | 100 % | 10.4 s |
+| LLM (Llama 3.2 3B, prompt v2) | **held-out** | **80.2 %** | 0.89 | 100 % | 10.5 s |
 
-**What the baseline shows:** hand-written rules look excellent on the ads they were written for (92.5 %) but drop to 68.8 % on unseen wording. Location falls from 93 % to 0 % and seniority and work mode to 50 %. That gap is the reason to use an LLM, and the reason a held-out set matters.
+LLM numbers are from the [LLM evaluation run](https://github.com/Sachinisand/LLMOps-Job-Ad-Extractor/actions/runs/38144055401) on a CPU-only GitHub runner. Both LLM runs pass the quality gate (valid JSON ≥ 95 %, field accuracy ≥ 75 %, skills F1 ≥ 0.70).
 
-LLM results come from the **LLM evaluation** workflow (Actions tab → *LLM evaluation* → *Run workflow*), which installs Ollama on a GitHub runner and evaluates the real model, or from running it locally (see below).
+Accuracy by field on the held-out set:
+
+| Field | Baseline | LLM |
+|---|---:|---:|
+| job_title | 100 % | 100 % |
+| seniority | 50 % | 83 % |
+| german_level | 75 % | 83 % |
+| english_required | 92 % | 75 % |
+| work_mode | 50 % | 83 % |
+| salary_min | 83 % | 58 % |
+| salary_max | 100 % | 58 % |
+| location | 0 % | 100 % |
+
+**What the results show**
+
+- **The rules overfit.** They look best on the ads they were written for (92.5 %) but drop to 68.8 % on unseen wording; location falls to 0 %.
+- **The LLM generalises better.** It loses only 6.5 points between the two sets and beats the rules on the held-out set by 11 points, mainly on location, seniority and work mode.
+- **The LLM is weak on numbers.** Salary fields are its main error source (58 % on held-out). The prompt asks the model to turn monthly pay into yearly and to handle ranges and hourly pay, and a 3B model does that arithmetic unreliably. A next step would be to let the LLM copy the raw salary text and do the conversion in Python.
+- **The cost is speed.** About 10 s per ad on CPU, against under 1 ms for the rules. Fine for a batch job, too slow for an interactive tool without a GPU or a smaller model.
+- **Practical choice:** combine both. Use the LLM for text fields and rules for salaries, and compare the hybrid with the same evaluation.
+
+To reproduce: Actions tab → *LLM evaluation* → *Run workflow* (installs Ollama on the runner, about 10 minutes), or run it locally (see below).
 
 ## Monitoring
 
