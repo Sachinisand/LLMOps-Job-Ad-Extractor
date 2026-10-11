@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>Job-Ad Extractor Monitoring</title>
+<style>
+:root{--page:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--grid:#e1e0d9;
+--axis:#c3c2b7;--s1:#2a78d6;--border:rgba(11,11,11,.1);--good:#006300;--bad:#d03b3b;}
+@media (prefers-color-scheme:dark){:root{--page:#0d0d0d;--surface:#1a1a19;--ink:#fff;--ink2:#c3c2b7;
+--grid:#2c2c2a;--axis:#383835;--s1:#3987e5;--border:rgba(255,255,255,.1);--good:#0ca30c;--bad:#e66767;}}
+*{box-sizing:border-box}body{margin:0;background:var(--page);color:var(--ink);
+font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 40px}h1{font-size:22px;margin:0 0 4px}
+.meta{color:var(--ink2);font-size:13px}.note{color:var(--muted);font-size:12px;margin-top:4px}
+.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:18px 0}
+.tile,.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+.tile .l{font-size:12px;color:var(--ink2)}.tile .v{font-size:24px;font-weight:600;margin-top:2px}
+.tile .s{font-size:12px;color:var(--muted)}.ok{color:var(--good)}.alert{color:var(--bad)}
+.grid{display:grid;grid-template-columns:3fr 2fr;gap:12px}h2{font-size:15px;margin:0 0 2px}
+.sub{font-size:12px;color:var(--ink2);margin-bottom:8px}svg{width:100%;height:auto;display:block}
+svg text{fill:var(--muted);font-size:11px}svg .v{fill:var(--ink2)}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:4px}
+td,th{padding:5px 8px;border-bottom:1px solid var(--grid);text-align:right}td:first-child,th:first-child{text-align:left}
+th{color:var(--ink2);font-weight:600}
+@media(max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<h1>Job-Ad Extractor – Monitoring</h1><div class="meta">Model / prompt: baseline:rules / prompt v2</div>
+<div class="note">Demo data: rule-based baseline with simulated traffic (60 mixed requests, then 25 English-only requests that trigger the drift alert). Run the scripts with your LLM to get real numbers.</div><div class="tiles"><div class="tile"><div class="l">Requests</div><div class="v ">85</div><div class="s">2026-10-11 to 2026-10-11</div></div><div class="tile"><div class="l">Valid JSON</div><div class="v ok">100%</div><div class="s">retries 0%</div></div><div class="tile"><div class="l">Latency p50 / p95</div><div class="v ">0 ms</div><div class="s">p95 1 ms</div></div><div class="tile"><div class="l">Corrections per request</div><div class="v ">0.77</div><div class="s">user feedback</div></div><div class="tile"><div class="l">Input drift</div><div class="v alert">⚠ Drift</div><div class="s">German share -37 pts, length -5 %</div></div></div>
+<div class="grid">
+ <div class="card"><h2>Latency per request</h2><div class="sub">milliseconds, in order of arrival</div><svg viewBox="0 0 600 220" role="img" aria-label="Latency per request"><line x1="48" x2="590" y1="194.0" y2="194.0" stroke="var(--axis)"/><text x="42" y="198.0" text-anchor="end">0</text><line x1="48" x2="590" y1="148.0" y2="148.0" stroke="var(--grid)"/><text x="42" y="152.0" text-anchor="end">2</text><line x1="48" x2="590" y1="102.0" y2="102.0" stroke="var(--grid)"/><text x="42" y="106.0" text-anchor="end">3</text><line x1="48" x2="590" y1="56.0" y2="56.0" stroke="var(--grid)"/><text x="42" y="60.0" text-anchor="end">5</text><line x1="48" x2="590" y1="10.0" y2="10.0" stroke="var(--grid)"/><text x="42" y="14.0" text-anchor="end">6</text><polyline points="48.0,86.5 54.5,179.1 60.9,179.1 67.4,179.1 73.8,179.1 80.3,185.0 86.7,182.1 93.2,182.1 99.6,182.1 106.1,182.1 112.5,185.0 119.0,185.0 125.4,182.1 131.9,179.1 138.3,185.0 144.8,182.1 151.2,185.0 157.7,182.1 164.1,179.1 170.6,185.0 177.0,185.0 183.5,185.0 190.0,182.1 196.4,182.1 202.9,182.1 209.3,179.1 215.8,179.1 222.2,176.1 228.7,179.1 235.1,179.1 241.6,179.1 248.0,179.1 254.5,173.1 260.9,182.1 267.4,182.1 273.8,182.1 280.3,182.1 286.7,182.1 293.2,182.1 299.6,182.1 306.1,182.1 312.5,182.1 319.0,185.0 325.5,182.1 331.9,182.1 338.4,182.1 344.8,179.1 351.3,182.1 357.7,182.1 364.2,179.1 370.6,179.1 377.1,182.1 383.5,185.0 390.0,182.1 396.4,182.1 402.9,182.1 409.3,182.1 415.8,182.1 422.2,182.1 428.7,179.1 435.1,26.7 441.6,167.1 448.0,179.1 454.5,182.1 461.0,179.1 467.4,173.1 473.9,182.1 480.3,182.1 486.8,182.1 493.2,179.1 499.7,182.1 506.1,185.0 512.6,182.1 519.0,179.1 525.5,185.0 531.9,185.0 538.4,182.1 544.8,182.1 551.3,182.1 557.7,182.1 564.2,182.1 570.6,182.1 577.1,182.1 583.5,182.1 590.0,182.1" fill="none" stroke="var(--s1)" stroke-width="2" stroke-linejoin="round"/><text x="48" y="214">request 1</text><text x="590" y="214" text-anchor="end">request 85</text></svg></div>
+ <div class="card"><h2>User corrections by field</h2><div class="sub">where real users found the answer wrong</div>
+ <svg viewBox="0 0 380 164" role="img" aria-label="Corrections by field"><text x="112" y="19" text-anchor="end">seniority</text><rect x="120" y="8" width="220.0" height="16" rx="4" fill="var(--s1)"/><text class="v" x="346.0" y="20">19</text><text x="112" y="45" text-anchor="end">location</text><rect x="120" y="34" width="196.8" height="16" rx="4" fill="var(--s1)"/><text class="v" x="322.8" y="46">17</text><text x="112" y="71" text-anchor="end">work_mode</text><rect x="120" y="60" width="173.7" height="16" rx="4" fill="var(--s1)"/><text class="v" x="299.7" y="72">15</text><text x="112" y="97" text-anchor="end">german_level</text><rect x="120" y="86" width="127.4" height="16" rx="4" fill="var(--s1)"/><text class="v" x="253.4" y="98">11</text><text x="112" y="123" text-anchor="end">english_required</text><rect x="120" y="112" width="23.2" height="16" rx="4" fill="var(--s1)"/><text class="v" x="149.2" y="124">2</text><text x="112" y="149" text-anchor="end">salary_min</text><rect x="120" y="138" width="11.6" height="16" rx="4" fill="var(--s1)"/><text class="v" x="137.6" y="150">1</text></svg></div>
+</div>
+<div class="card" style="margin-top:12px"><h2>Input drift check</h2>
+<div class="sub">The most recent requests compared with the evaluation set. Alert when the German share moves by more than 20 points or the average length by more than 30 %.</div>
+<table><tr><th>Measure</th><th>Evaluation set</th><th>Last 30 requests</th><th>Change</th></tr><tr><td>Share of German ads</td><td>53%</td><td>17%</td><td>-36.7 pts</td></tr><tr><td>Average ad length (characters)</td><td>287</td><td>272</td><td>-5.2 %</td></tr></table></div></div></body></html>
