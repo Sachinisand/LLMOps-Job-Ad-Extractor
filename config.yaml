@@ -1,0 +1,25 @@
+# Central settings. Change the model or prompt here, not in the code.
+llm:
+  backend: ollama              # "ollama" (real LLM) or "baseline" (rule-based, no LLM)
+  model: llama3.2:3b           # any model pulled with `ollama pull <name>`
+  ollama_url: http://localhost:11434
+  temperature: 0
+  timeout_seconds: 120
+
+prompt_version: v2             # file in prompts/ (v1.md, v2.md, ...)
+
+monitoring:
+  db_path: data/monitoring.db
+  drift_window: 30             # compare the last N requests with the evaluation set
+
+# Minimum scores an evaluation run must reach. eval/evaluate.py exits with an
+# error below these, so a worse prompt or model cannot be released by accident.
+quality_gate:
+  llm:
+    json_valid_rate: 0.95
+    field_accuracy: 0.75
+    skills_f1: 0.70
+  baseline:                    # used in CI, where no LLM is available
+    json_valid_rate: 1.0
+    field_accuracy: 0.60
+    skills_f1: 0.70
